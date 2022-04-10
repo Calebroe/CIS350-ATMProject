@@ -17,17 +17,8 @@ import javax.swing.border.LineBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/*************************************************
- * Class for ATM withdrawal screen
- *
- * @author Caleb Roe
- * @version March 2, 2022
- *************************************************/
 public class Withdrawal extends JFrame {
-	/**
-	 * Instance variables for JFrame construction
-	 */
-	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane, withdrawalPanel;
 	private JTextField withdrawField, currBalanceField, prevBalanceField, stmtField;
 	private JLabel amtBnner, towthdrwBnr, currentBnnr, previousBnnr, userInfo;
@@ -39,7 +30,7 @@ public class Withdrawal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Withdrawal(User[] users,User currentUser) {
+	public Withdrawal() {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 717, 582);
@@ -48,6 +39,7 @@ public class Withdrawal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		//setResizable(false);
 		
 		withdrawalPanel = new JPanel();
 		withdrawalPanel.setLayout(null);
@@ -166,25 +158,27 @@ public class Withdrawal extends JFrame {
 		stmtField.setBounds(10, 385, 682, 153);
 		contentPane.add(stmtField);
 		
-		Withdrawal.users = users;
-		Withdrawal.currentUser = currentUser;
+		//Withdrawal.users = users;  //= Deposit.users;
+		//Withdrawal.currentUser = currentUser; //= Deposit.currentUser;
+		//users = this.users;
+		//currentUser = this.currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == returnButton) {
-				new Main(users,currentUser).setVisible(true);
+				new Main().setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == confirmBtn) {
 				try {
-					currBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
-					currentUser.withdrawlMoney(withdrawVal);
-					prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
-					stmtField.setText("The withdrawal in the amount of: $"+withdrawVal+ 
-							" was successfully withdrawn from account:" + currentUser.getAccountNumber());
-					withdrawVal = 0;
-					withdrawField.setText("$ " + withdrawVal + ".00");
+					//currBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
+					//currentUser.withdrawlMoney(withdrawVal);
+					//prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
+					//stmtField.setText("The withdrawal in the amount of: $"+withdrawVal+ 
+					//		" was successfully withdrawn from account:" + currentUser.getAccountNumber());
+					//withdrawVal = 0;
+					//withdrawField.setText("$ " + withdrawVal + ".00");
 				}catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Amount to withdraw exceeds current Balance");
 				}
@@ -225,7 +219,7 @@ public class Withdrawal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Withdrawal frame = new Withdrawal(users,currentUser);
+					Withdrawal frame = new Withdrawal();
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {
