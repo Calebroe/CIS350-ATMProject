@@ -23,17 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 
-/*************************************************
- * Class for ATM transfer screen
- *
- * @author Caleb Roe
- * @version March 2, 2022
- *************************************************/
 public class Transfer extends JFrame {
-	/**
-	 * Instance variables for JFrame construction
-	 */
-	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane, transferPanel;
 	private JTextField acctTrnField, amtTrnField, authPinField, acctNumField, acctBlncField;
 	private JButton returnButton, transferBtn, clearBtn;
@@ -46,7 +37,7 @@ public class Transfer extends JFrame {
 	/**
 	 * Initialize JFrame.
 	 */
-	public Transfer(User[] users,User currentUser) {
+	public Transfer() {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 532, 692);
@@ -148,8 +139,8 @@ public class Transfer extends JFrame {
 		stmtField.setBounds(10, 415, 476, 205);
 		transferPanel.add(stmtField);
 		
-		Transfer.users = users;
-		Transfer.currentUser = currentUser;
+		//Transfer.users = users;
+		//Transfer.currentUser = currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
@@ -158,7 +149,7 @@ public class Transfer extends JFrame {
 			int accountNum = Integer.parseInt(acctTrnField.getText());
 						
 			if(event.getSource() == returnButton) {
-				new Main(users,currentUser).setVisible(true);
+				new Main().setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == transferBtn) {
@@ -200,7 +191,7 @@ public class Transfer extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Transfer frame = new Transfer(users,currentUser);
+					Transfer frame = new Transfer();
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {
