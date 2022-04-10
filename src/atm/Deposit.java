@@ -8,8 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
-
-//import atm.Withdrawal.ButtonListener;
+import atm.Withdrawal.ButtonListener;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -20,15 +19,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-/*************************************************
- * Class for ATM deposit screen
- *
- * @author Caleb Roe
- * @version March 2, 2022
- *************************************************/
 public class Deposit extends JFrame {
+
 	/**
-	 * Instance variables for JFrame construction
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane, depositPanel;
@@ -44,9 +38,14 @@ public class Deposit extends JFrame {
 	private int depositVal;
 	
 	/**
+	 * Launch the application.
+	 */
+	
+
+	/**
 	 * Create the frame.
 	 */
-	public Deposit(User[] users,User currentUser) {
+	public Deposit() {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 715, 588);
@@ -173,24 +172,24 @@ public class Deposit extends JFrame {
 		stmtField.setBounds(10, 385, 682, 153);
 		contentPane.add(stmtField);
 		
-		Deposit.users = users;  //= Deposit.users;
-		Deposit.currentUser = currentUser; //= Deposit.currentUser;
+		//Deposit.users = users;  //= Deposit.users;
+		//Deposit.currentUser = currentUser; //= Deposit.currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == returnButton) {
-				new Main(users,currentUser).setVisible(true);
+				new Main().setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == confirmBtn) {
-				currBalanceField.setText("$  "+currentUser.getTotalBalance() + ".00");
-				currentUser.depositMoney(depositVal);
-				prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
-				stmtField.setText("The deposit in the amount of: $"+depositVal+ 
-						" was successfully deposited in account:" + currentUser.getAccountNumber());
-				depositVal = 0;
-				depositField.setText("$ " + depositVal + ".00");
+				//currBalanceField.setText("$  "+currentUser.getTotalBalance() + ".00");
+				//currentUser.depositMoney(depositVal);
+				//prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
+				//stmtField.setText("The deposit in the amount of: $"+depositVal+ 
+				//		" was successfully deposited in account:" + currentUser.getAccountNumber());
+				//depositVal = 0;
+				//depositField.setText("$ " + depositVal + ".00");
 			}
 			else if(event.getSource() == clearBtn) {
 				depositVal = 0;
@@ -229,7 +228,7 @@ public class Deposit extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Deposit frame = new Deposit(users,currentUser);
+					Deposit frame = new Deposit();
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {
