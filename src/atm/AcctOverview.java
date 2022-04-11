@@ -15,6 +15,11 @@ import javax.swing.JButton;
 public class AcctOverview extends JFrame {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
