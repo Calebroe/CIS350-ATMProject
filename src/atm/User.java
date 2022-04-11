@@ -3,30 +3,32 @@ package atm;
 import java.util.Date;
 
 public class User {
-	public int pin;
-    public String firstName;
-    public String lastName;
-    public int totalBalance;
-    public int accountNumber;
+	private int userPin;
+	private String firstName;
+    private String lastName;
+    private Date dob;
+    private int userId;
     
-    //public User(String firstName, String lastName, int pin, int totalBalance, int accountNumber) {
-    //    this.firstName = firstName;
-    //    this.lastName = lastName;
-    //    this.pin = pin;
-    //    this.totalBalance = totalBalance;
-    //    this.accountNumber = accountNumber;
-    //}
+    //setup random number for userId, string of eight numbers, it needs a check to see if the database already has that number
     
-    public void setPin(int pin) {
-        int length = String.valueOf(pin).length();
+    public User(String firstName, String lastName, int userPin, int userId, Date dob) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userPin = userPin;
+        this.userId = userId;
+        this.dob = dob;
+    }
+    
+    public void setUserPin(int userPin) {
+        int length = String.valueOf(userPin).length();
         if (length != 4) {
             throw new IllegalArgumentException();
         }
-        this.pin = pin;
+        this.userPin = userPin;
     }
     
-    public int getPin() {
-        return pin;
+    public int getUserPin() {
+        return userPin;
     }
     
     public void setFirstName(String firstName) {
@@ -64,28 +66,30 @@ public class User {
         return lastName;
     }
     
-    public void setTotalBalance(int totalBalance) {
-        if (totalBalance < 0) {
-            throw new IllegalArgumentException();
-        }
-        this.totalBalance = totalBalance;
+    public Date getDob() {
+        return dob;
     }
     
-    public int getTotalBalance() {
-        return totalBalance;
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
     
-    public void setAccountNumber(int accountNumber) {
-        int length = String.valueOf(accountNumber).length();
-        if (length != 10) {
-            throw new IllegalArgumentException();
-        }
-        this.accountNumber = accountNumber;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     
-    public int getAccountNumber() {
-        return accountNumber;
+    public int getUserId() {
+        return userId;
     }
+    
+//    public void setAccountNumber(int accountNumber) {
+//        int length = String.valueOf(accountNumber).length();
+//        if (length != 10) {
+//            throw new IllegalArgumentException();
+//        }
+//        this.accountNumber = accountNumber;
+//    }
+    
     
     //logic for banking system
     public int withdrawlMoney(int moneyWithdrawn){
@@ -111,8 +115,8 @@ public class User {
   //toString()
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userName=" + userName + ", dob="
-                + dob + ", balance=" + balance + "accountNumber:" + accountNumber]";"
+        return "User [userId = " + userId + ", userPin = " + userPin + ", dob = "
+                + dob + ", First Name = " + firstName + "Last Name = " + lastName + "]";
     } 
 }
 	
