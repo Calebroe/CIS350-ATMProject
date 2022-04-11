@@ -16,11 +16,11 @@ public class Database {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter the EmployeeID:");
          
-        int employeeId;
+        int userId;
         try {
-            employeeId = Integer.parseInt(br.readLine());
+            userId = Integer.parseInt(br.readLine());
             Database database = new Database();
-            User user = database.getUser(userId);
+            User user = database.getUserId(userId);
             System.out.println(user);           
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -29,7 +29,7 @@ public class Database {
         }       
     }
  
-    public User getEmployee(int userId)  {      
+    public User getUserId(int userId)  {      
         ResultSet rs = null;
         Connection connection = null;
         Statement statement = null; 
@@ -42,12 +42,12 @@ public class Database {
             rs = statement.executeQuery(query);
              
             if (rs.next()) {
-                employee = new Employee();
-                employee.setEmpId(rs.getInt("emp_id"));
-                employee.setEmpName(rs.getString("emp_name"));
-                employee.setDob(rs.getDate("dob"));
-                employee.setSalary(rs.getDouble("salary"));
-                employee.setDeptId((rs.getInt("dept_id")));
+                user = new User(rs.getString("first_name"), rs.getString("last_name"), rs.getInt("user_pin"), rs.getInt("user_id"), rs.getDate("user_dob"));
+//                user.setUserId(rs.getInt("emp_id"));
+//                user.setFirstName(rs.getString("emp_name"));
+//                user.setDob(rs.getDate("dob"));
+//                user.setLastName(rs.getDouble("salary"));
+//                user.setUserId((rs.getInt("dept_id")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,6 +60,6 @@ public class Database {
                 }
             }
         }
-        return employee;
+        return user;
     }
 }
