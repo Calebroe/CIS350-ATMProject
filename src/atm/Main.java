@@ -129,7 +129,7 @@ public class Main extends JFrame {
 				dispose();
 			}
 			else if(event.getSource() == AccountBtn) {
-				new Account().setVisible(true);
+				new AcctOverview().setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == StatementBtn) {

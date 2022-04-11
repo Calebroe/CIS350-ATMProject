@@ -12,7 +12,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Account extends JFrame {
+public class AcctOverview extends JFrame {
 
 	/**
 	 * Launch the application.
@@ -21,7 +21,7 @@ public class Account extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Account frame = new Account();
+					AcctOverview frame = new AcctOverview();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,7 +33,7 @@ public class Account extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Account() {
+	public AcctOverview() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 490);
 	}
