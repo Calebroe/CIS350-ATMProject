@@ -29,15 +29,18 @@ public class Transfer extends JFrame {
 	private JTextField acctTrnField, amtTrnField, authPinField, acctNumField, acctBlncField;
 	private JButton returnButton, transferBtn, clearBtn;
 	JTextArea stmtField;
-	private static User[] users;
+	//private static User[] users;
 	private static User currentUser, transferUser;
 	private JLabel acctNum, acctBlnc, authPin, transferlbl, acctTransfer, amtTransfer, dollarSign;
 	private int transferVal = 0;
+	
+	Database database = new Database();
+
 		
 	/**
 	 * Initialize JFrame.
 	 */
-	public Transfer() {
+	public Transfer(User currentUser) {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 532, 692);
@@ -139,8 +142,7 @@ public class Transfer extends JFrame {
 		stmtField.setBounds(10, 415, 476, 205);
 		transferPanel.add(stmtField);
 		
-		//Transfer.users = users;
-		//Transfer.currentUser = currentUser;
+		Transfer.currentUser = currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
@@ -149,7 +151,7 @@ public class Transfer extends JFrame {
 			int accountNum = Integer.parseInt(acctTrnField.getText());
 						
 			if(event.getSource() == returnButton) {
-				new Main().setVisible(true);
+				new Main(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == transferBtn) {
@@ -191,7 +193,7 @@ public class Transfer extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Transfer frame = new Transfer();
+					Transfer frame = new Transfer(currentUser);
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {

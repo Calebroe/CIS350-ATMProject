@@ -9,12 +9,12 @@ public class JDBCMySQLConnection {
   //static reference to itself
   private static JDBCMySQLConnection instance = new JDBCMySQLConnection();
   public static final String URL = "jdbc:mysql://localhost/atmschema";
-  public static final String USER = "admin";
+  public static final String USER = "root";
   public static final String PASSWORD = "admin1";
   public static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver"; 
    
   //private constructor
-  private JDBCMySQLConnection() {
+  public JDBCMySQLConnection() {
       try {
           //Step 2: Load MySQL Java driver
           Class.forName(DRIVER_CLASS);
@@ -31,6 +31,7 @@ public class JDBCMySQLConnection {
           connection = DriverManager.getConnection(URL, USER, PASSWORD);
       } catch (SQLException e) {
           System.out.println("ERROR: Unable to Connect to Database.");
+          //System.out.println(e);
       }
       return connection;
   }   

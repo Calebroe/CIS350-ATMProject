@@ -25,20 +25,16 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 	private JButton LogOutBtn, depositButton, withdrawButton, transferButton;
 	private JLabel welcomeUser, atmBanner1, atmBanner2;
-	private static User[] users;
 	private static User currentUser;
 	private JButton AccountBtn;
 	private JButton StatementBtn;
-	/**
-	 * Launch the application.
-	 */
 	
 
 	/**
 	 * Create the frame.
 	 */
 	//public Main(User users[], User currentUser) {
-	public Main() {
+	public Main(User currentUser) {
 		setBackground(Color.LIGHT_GRAY);
 		setTitle("ATLAS ATM Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,40 +98,37 @@ public class Main extends JFrame {
 		welcomeUser.setText("Welcome back " + currentUser.getFirstName() + " " + currentUser.getLastName());
 		contentPane.add(welcomeUser);
 		
-		
-		
 		//assigning parameters
 		//Main.users = users; //= Main.users;
-		//Main.currentUser = currentUser;  //= Main.currentUser;
+		Main.currentUser = currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == LogOutBtn) {
-				Login window = new Login();
-				window.frmAtm.setVisible(true);
+				new Welcome().setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == depositButton) {
-				new Deposit().setVisible(true);
+				new Deposit(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == withdrawButton) {
-				new Withdrawal().setVisible(true);
+				new Withdrawal(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == transferButton) {
-				new Transfer().setVisible(true);
+				new Transfer(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == AccountBtn) {
-				new AcctOverview().setVisible(true);
+				new AccountView(currentUser).setVisible(true);
 				dispose();
 			}
-			else if(event.getSource() == StatementBtn) {
-				new Statement().setVisible(true);
-				dispose();
-			}
+//			else if(event.getSource() == StatementBtn) {
+//				new Statement(currentUser).setVisible(true);
+//				dispose();
+//			}
 		}
 	}
 	
@@ -143,7 +136,7 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main mainFrame = new Main();
+					Main mainFrame = new Main(currentUser);
 					mainFrame.setVisible(true);
 					mainFrame.setResizable(false);
 				} catch (Exception e) {

@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.SQLException;
+import java.util.Date;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,18 +22,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
 public class Welcome extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
-	private JPanel contentPane, panel;
-	private JLabel titleBanner, titleBanner2, titleBanner3, userBanner, acctBanner;
-	private JButton loginBtn, CreateAcctBtn;
 
-	//private User[] users = new User[3];
-	//private User currentUser = null;
-	
+	private JPanel contentPane, panel;
+	private JLabel titleBanner, titleBanner2, titleBanner3, userBanner, acctBanner, acctLbl, pinLbl;
+	private JButton loginBtn, CreateAcctBtn;
+	private JTextField acctField;
+	private JPasswordField pinField;
+	private static User currentUser;
+
+	// private static User[] users;
+
+	// User currentUser = new User("testfirstn","testlastn", 1111, 1000001,
+	// 06061999);
+
 	/**
 	 * Create the frame.
 	 */
@@ -39,83 +49,111 @@ public class Welcome extends JFrame {
 		setResizable(false);
 		setTitle("Atlas ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 400, 460);
+		setBounds(100, 100, 399, 507);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(10, 11, 364, 399);
+		panel.setBounds(10, 11, 363, 446);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		titleBanner = new JLabel("Atlas");
 		titleBanner.setHorizontalAlignment(SwingConstants.CENTER);
 		titleBanner.setFont(new Font("Tahoma", Font.BOLD, 35));
-		titleBanner.setBounds(125, 48, 125, 34);
+		titleBanner.setBounds(125, 48, 89, 43);
 		panel.add(titleBanner);
-		
+
 		titleBanner2 = new JLabel("Automated Telling");
 		titleBanner2.setHorizontalAlignment(SwingConstants.CENTER);
 		titleBanner2.setFont(new Font("Tahoma", Font.BOLD, 20));
-		titleBanner2.setBounds(82, 93, 215, 25);
+		titleBanner2.setBounds(82, 93, 185, 25);
 		panel.add(titleBanner2);
-		
+
 		titleBanner3 = new JLabel("Machine");
 		titleBanner3.setHorizontalAlignment(SwingConstants.CENTER);
 		titleBanner3.setFont(new Font("Tahoma", Font.BOLD, 20));
-		titleBanner3.setBounds(82, 129, 215, 25);
+		titleBanner3.setBounds(125, 129, 85, 25);
 		panel.add(titleBanner3);
-		
+
 		loginBtn = new JButton("Login");
-		loginBtn.setBounds(142, 208, 89, 23);
+		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 15));
+		loginBtn.setBounds(125, 279, 89, 23);
 		loginBtn.addActionListener(new ButtonListener());
 		panel.add(loginBtn);
-		
+
 		userBanner = new JLabel("Existing User?");
 		userBanner.setFont(new Font("Tahoma", Font.BOLD, 15));
-		userBanner.setBounds(135, 180, 108, 14);
+		userBanner.setBounds(123, 181, 108, 19);
 		panel.add(userBanner);
-		
+
 		acctBanner = new JLabel("Become an Account Holder");
 		acctBanner.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctBanner.setBounds(88, 253, 205, 14);
+		acctBanner.setBounds(81, 335, 205, 14);
 		panel.add(acctBanner);
-		
+
 		CreateAcctBtn = new JButton("Create Account");
-		CreateAcctBtn.setBounds(130, 278, 112, 23);
+		CreateAcctBtn.setFont(new Font("Tahoma", Font.BOLD, 15));
+		CreateAcctBtn.setBounds(103, 360, 148, 23);
 		CreateAcctBtn.addActionListener(new ButtonListener());
 		panel.add(CreateAcctBtn);
-		
-		//users[0] = new User("Caleb", "Roe", 1111, 1400, 1001);
-		//users[1] = new User("Grant", "Spears", 1112, 1500, 1002);
-		//users[2] = new User("Jessica", "Kressner", 1113, 1600, 1003);
-		
+
+		acctField = new JTextField();
+		acctField.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		acctField.setColumns(10);
+		acctField.setBounds(145, 213, 122, 20);
+		panel.add(acctField);
+
+		acctLbl = new JLabel("Account #:");
+		acctLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		acctLbl.setBounds(81, 216, 54, 14);
+		panel.add(acctLbl);
+
+		pinLbl = new JLabel("PIN #:");
+		pinLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		pinLbl.setBounds(103, 241, 32, 14);
+		panel.add(pinLbl);
+
+		pinField = new JPasswordField();
+		pinField.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		pinField.setBounds(145, 238, 122, 20);
+		panel.add(pinField);
+
+		currentUser = new User();
 	}
-	
+
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if(event.getSource() == loginBtn) {
-				Login window = new Login();
-				window.frmAtm.setVisible(true);
-				dispose();
-			}
-			else if(event.getSource() == CreateAcctBtn) {
+			if (event.getSource() == loginBtn) {
+				int userId = Integer.parseInt(acctField.getText());
+				int userPin = Integer.parseInt(pinField.getText());
+				// call method in database
+				try {
+					currentUser.getUserAccount(userPin, userId);
+					new Main(currentUser).setVisible(true);
+					dispose();
+
+				} catch (Exception e) {
+					// create unique exceptions and check exception e to see which error was thrown
+				}
+			} else if (event.getSource() == CreateAcctBtn) {
 				new Form().setVisible(true);
 				dispose();
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Welcome frame = new Welcome();
 					frame.setVisible(true);
+					frame.setResizable(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

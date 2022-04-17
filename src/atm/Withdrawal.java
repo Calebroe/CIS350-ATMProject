@@ -23,14 +23,15 @@ public class Withdrawal extends JFrame {
 	private JTextField withdrawField, currBalanceField, prevBalanceField, stmtField;
 	private JLabel amtBnner, towthdrwBnr, currentBnnr, previousBnnr, userInfo;
 	private JButton returnButton, confirmBtn, clearBtn, oneDollarBtn, fiveDollarBtn, tenDollarBtn, twentyDollarBtn, fiftyDollarBtn, hundredDollarBtn;
-	private static User[] users;
 	private static User currentUser;
 	private int withdrawVal;
+	
+	Database database = new Database();
 
 	/**
 	 * Create the frame.
 	 */
-	public Withdrawal() {
+	public Withdrawal(User currentUser) {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 717, 582);
@@ -39,7 +40,6 @@ public class Withdrawal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		//setResizable(false);
 		
 		withdrawalPanel = new JPanel();
 		withdrawalPanel.setLayout(null);
@@ -159,7 +159,7 @@ public class Withdrawal extends JFrame {
 		contentPane.add(stmtField);
 		
 		//Withdrawal.users = users;  //= Deposit.users;
-		//Withdrawal.currentUser = currentUser; //= Deposit.currentUser;
+		Withdrawal.currentUser = currentUser;
 		//users = this.users;
 		//currentUser = this.currentUser;
 	}
@@ -167,7 +167,7 @@ public class Withdrawal extends JFrame {
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == returnButton) {
-				new Main().setVisible(true);
+				new Main(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == confirmBtn) {
@@ -219,7 +219,7 @@ public class Withdrawal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Withdrawal frame = new Withdrawal();
+					Withdrawal frame = new Withdrawal(currentUser);
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {

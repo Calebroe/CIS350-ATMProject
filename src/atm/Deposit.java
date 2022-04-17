@@ -37,15 +37,9 @@ public class Deposit extends JFrame {
 	private JTextField stmtField;
 	private int depositVal;
 	
-	/**
-	 * Launch the application.
-	 */
+	Database database = new Database();
 	
-
-	/**
-	 * Create the frame.
-	 */
-	public Deposit() {
+	public Deposit(User currentUser) {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 715, 588);
@@ -173,13 +167,13 @@ public class Deposit extends JFrame {
 		contentPane.add(stmtField);
 		
 		//Deposit.users = users;  //= Deposit.users;
-		//Deposit.currentUser = currentUser; //= Deposit.currentUser;
+		Deposit.currentUser = currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == returnButton) {
-				new Main().setVisible(true);
+				new Main(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == confirmBtn) {
@@ -198,7 +192,6 @@ public class Deposit extends JFrame {
 			else if(event.getSource() == oneDollarBtn) {
 				depositVal++;
 				depositField.setText("$ " + depositVal + ".00");
-				
 			}
 			else if(event.getSource() == fiveDollarBtn) {
 				depositVal = depositVal + 5;
@@ -220,7 +213,6 @@ public class Deposit extends JFrame {
 				depositVal = depositVal + 100;
 				depositField.setText("$ " + depositVal + ".00");
 			}
-			
 		}
 	}
 	
@@ -228,7 +220,7 @@ public class Deposit extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Deposit frame = new Deposit();
+					Deposit frame = new Deposit(currentUser);
 					frame.setVisible(true);
 					frame.setResizable(false);
 				} catch (Exception e) {
