@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,7 +29,7 @@ public class Withdrawal extends JFrame {
 	private int withdrawVal;
 	
 	Database database = new Database();
-
+	JComboBox comboBox = new JComboBox();
 	/**
 	 * Create the frame.
 	 */
@@ -144,7 +146,7 @@ public class Withdrawal extends JFrame {
 		prevBalanceField.setEditable(false);
 		prevBalanceField.setColumns(10);
 		prevBalanceField.setBounds(438, 125, 161, 27);
-		prevBalanceField.setText("$  "+ currentUser.getTotalBalance() +".00");
+		//prevBalanceField.setText("$  "+ currentUser.getTotalBalance() +".00");
 		withdrawalPanel.add(prevBalanceField);
 		
 		userInfo = new JLabel("New label");
@@ -152,16 +154,19 @@ public class Withdrawal extends JFrame {
 		userInfo.setText("Welcome back " + currentUser.getFirstName() + " " + currentUser.getLastName());
 		withdrawalPanel.add(userInfo);
 		
+		for (Account a : currentUser.getAllAccounts()) {
+			comboBox.addItem(a.getacctId());
+		}
+		comboBox.setBounds(327, 315, 247, 23);
+		withdrawalPanel.add(comboBox);
+		
 		stmtField = new JTextField();
 		stmtField.setEditable(false);
 		stmtField.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		stmtField.setBounds(10, 385, 682, 153);
 		contentPane.add(stmtField);
 		
-		//Withdrawal.users = users;  //= Deposit.users;
 		Withdrawal.currentUser = currentUser;
-		//users = this.users;
-		//currentUser = this.currentUser;
 	}
 	
 	public class ButtonListener implements ActionListener {
@@ -172,13 +177,21 @@ public class Withdrawal extends JFrame {
 			}
 			else if(event.getSource() == confirmBtn) {
 				try {
-					//currBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
-					//currentUser.withdrawlMoney(withdrawVal);
-					//prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
-					//stmtField.setText("The withdrawal in the amount of: $"+withdrawVal+ 
-					//		" was successfully withdrawn from account:" + currentUser.getAccountNumber());
-					//withdrawVal = 0;
-					//withdrawField.setText("$ " + withdrawVal + ".00");
+					int acctId = (Integer) comboBox.getSelectedItem();
+					int value = Integer.parseInt(withdrawField.getText());
+					Account account = currentUser.getAccount(acctId);
+					if(value < 0) {
+						stmtField.setText("Unable to deposit $0.00 into an account"); 
+					}
+					if(account.canWithdrawAmount(value) != true) {
+						stmtField.setText("Unable to deposit amount into account. deposit amount exceeds current account balance"); 
+					}
+					else {
+						int oldVal = account.withdrawFromAccount(value);
+						prevBalanceField.setText(Integer.toString(oldVal));
+						currBalanceField.setText(Integer.toString(account.gettotalBalance()));
+						stmtField.setText("Successfully withdrew $" + value + "From Account:" + account); 
+					}
 				}catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Amount to withdraw exceeds current Balance");
 				}
