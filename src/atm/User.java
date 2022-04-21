@@ -1,6 +1,7 @@
 package atm;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -60,47 +61,9 @@ public class User {
 //			if (rs == null) {
 //				// throw new illegal arguement no accounts found
 //			}
-			if (rs.next()) {
+			while (rs.next()) {
 				Account a1 = new Account(rs.getInt("account_id"), rs.getInt("balance"), rs.getString("account_type"));
 				accounts.add(a1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return user;
-	}
-
-	public User createUserAccount(String firstName, String lastName, int userId, int userPin, Date dob) {
-		ResultSet rs = null;
-		Connection connection = null;
-		Statement statement = null;
-
-		User user = null;
-		String query = "SELECT * FROM user WHERE user_id=" + userId;
-		try {
-			connection = JDBCMySQLConnection.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
-			if (rs == null) {
-				// throw new illegal arguement no account found
-			}
-			if (userPin != rs.getInt("user_pin")) {
-				// throw new illegal arguement does not match
-			}
-			if (rs.next()) {
-				userPin = rs.getInt("user_pin");
-				userId = rs.getInt("emp_id");
-				firstName = rs.getString("user_firstname");
-				lastName = rs.getString("user_lastname");
-				dob = rs.getDate("dob");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
