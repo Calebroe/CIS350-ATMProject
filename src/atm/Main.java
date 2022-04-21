@@ -79,11 +79,13 @@ public class Main extends JFrame {
 		AccountBtn = new JButton("Account");
 		AccountBtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		AccountBtn.setBounds(266, 203, 140, 45);
+		AccountBtn.addActionListener(new ButtonListener());
 		contentPane.add(AccountBtn);
 		
 		StatementBtn = new JButton("Statement");
 		StatementBtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		StatementBtn.setBounds(80, 281, 140, 45);
+		StatementBtn.addActionListener(new ButtonListener());
 		contentPane.add(StatementBtn);
 		
 		LogOutBtn = new JButton("Log Out");
