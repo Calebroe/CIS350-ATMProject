@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
 
 public class Transfer extends JFrame {
 
@@ -35,7 +36,8 @@ public class Transfer extends JFrame {
 	private int transferVal = 0;
 	
 	Database database = new Database();
-
+	JComboBox comboBox1 = new JComboBox();
+	JComboBox comboBox2 = new JComboBox();
 		
 	/**
 	 * Initialize JFrame.
@@ -142,7 +144,20 @@ public class Transfer extends JFrame {
 		stmtField.setBounds(10, 415, 476, 205);
 		transferPanel.add(stmtField);
 		
+		for (Account a : currentUser.getAllAccounts()) {
+			comboBox1.addItem(a.getacctId());
+		}
+		comboBox1.setBounds(327, 315, 247, 23); //create new position using windowbuilder
+		transferPanel.add(comboBox1);
+		
+		for (Account a : currentUser.getAllAccounts()) {
+			comboBox2.addItem(a.getacctId());
+		}
+		comboBox2.setBounds(327, 315, 247, 23); //create new position using windowbuilder
+		transferPanel.add(comboBox2);
 		Transfer.currentUser = currentUser;
+		
+		//create two labels for drop downs, one for select acount to transfer from and transfer to.
 	}
 	
 	public class ButtonListener implements ActionListener {
@@ -155,32 +170,40 @@ public class Transfer extends JFrame {
 				dispose();
 			}
 			else if(event.getSource() == transferBtn) {
-				int check = 1;
-				transferVal = Integer.parseInt(amtTrnField.getText());
-				if(currentUser.correctLogin(currentUser.getAccountNumber(),acctPin) == false) {
-					JOptionPane.showMessageDialog(null, "Please Enter Correct Account Pin");
-					check = 0;
+				try {
+					int acctId1 = (Integer) comboBox1.getSelectedItem();
+					int acctId2 = (Integer) comboBox2.getSelectedItem();
+					int value = Integer.parseInt(amtTrnField.getText());
+					Account accountFrom = currentUser.getAccount(acctId1);
+					Account accountTo = currentUser.getAccount(acctId2);
+					if(value < 0) {
+						stmtField.setText("Unable to transfer $0.00 into an account"); 
+						break; //break of this try, throw new illegal argument exception
+					}
+					if(accountFrom.canWithdrawAmount(value) != true) {
+						stmtField.setText("Amount to transfer exceeds the current Balance of" + accountFrom); 
+						break; //need to break out of this try, throw new illegal argument exception
+					}
+					else {
+						int oldVal = accountFrom.withdrawFromAccount(value);
+						int newVal = accountTo.depositIntoAccount(value);
+						//prevBalanceField.setText(Integer.toString(oldVal));
+						//currBalanceField.setText(Integer.toString(account.gettotalBalance()));
+						stmtField.setText("Successfully transferred $" + value + "From Account:" + accountFrom + " to Account: " + accountTo); 
+					}
+				}catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Amount to withdraw exceeds current Balance");
 				}
-				if(check == 1) {
-					for(int i=0; i < users.length; i++) {
-						if(accountNum == users[i].getAccountNumber()) {
-							transferUser = users[i];
-						}
-					}
-					if(transferUser == null) {
-						JOptionPane.showMessageDialog(null, "Please enter valid transfer account number");
-					}
-					currentUser.withdrawlMoney(transferVal);
-					transferUser.depositMoney(transferVal);
-					stmtField.setText("Transfered in the amount of: $"+ transferVal + " from account: " + currentUser.getAccountNumber() + 
-							" to account: " + transferUser.getAccountNumber()); 
+					//currentUser.withdrawlMoney(transferVal);
+					//transferUser.depositMoney(transferVal);
+					//stmtField.setText("Transfered in the amount of: $"+ transferVal + " from account: " + currentUser.getAccountNumber() + 
+					//		" to account: " + transferUser.getAccountNumber()); 
 					//stmtField.setText("Transfered $" + transferVal + "from account: " + currentUser.getAccountNumber() + 
 							//" to account: " + transferUser.getAccountNumber());
-					acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
+					//acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
 					amtTrnField.setText("");
 					acctTrnField.setText("");
 				}
-			}
 			else if(event.getSource() == clearBtn) {
 				int temp = 0;
 				amtTrnField.setText("$ " + temp + ".00");
