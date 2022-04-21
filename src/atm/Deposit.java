@@ -41,7 +41,7 @@ public class Deposit extends JFrame {
 	private int depositVal;
 	
 	Database database = new Database();
-	JComboBox comboBox1 = new JComboBox();
+	JComboBox comboBox = new JComboBox();
 	
 	public Deposit(User currentUser) {
 		

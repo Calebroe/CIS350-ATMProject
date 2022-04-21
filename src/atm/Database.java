@@ -57,43 +57,6 @@ public class Database {
 //		}
 //		return user;
 //	}
-
-	// Method template
-	public boolean checkUserId(String userId) {
-		ResultSet rs = null;
-		Connection connection = null;
-		Statement statement = null;
-
-		User user = null;
-		//String query = "IF user_id(userId) IS NULL"
-				RETURN NULL;
-		try {
-			connection = JDBCMySQLConnection.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
-
-			if (rs.next()) {
-				//user = new User(rs.getString("first_name"), rs.getString("last_name"), rs.getInt("user_pin"),
-				//		rs.getInt("user_id"), rs.getDate("user_dob"));
-//                user.setUserId(rs.getInt("emp_id"));
-//                user.setFirstName(rs.getString("emp_name"));
-//                user.setDob(rs.getDate("dob"));
-//                user.setLastName(rs.getDouble("salary"));
-//                user.setUserId((rs.getInt("dept_id")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		//return user;
-	}
 	
 	//method that checks if first name and last name are in the database
 	
@@ -141,7 +104,7 @@ public class Database {
 		} 
 	}
 	
-	public void createAccount(String , String lastName, int userId, int userPin, java.sql.Date dob) { 
+	public void createAccount(String firstName, String lastName, int userId, int userPin, java.sql.Date dob) { 
 		ResultSet rs = null;
 		Connection connection = JDBCMySQLConnection.getConnection();
 		//User user = null;

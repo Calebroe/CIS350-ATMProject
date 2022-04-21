@@ -130,13 +130,13 @@ public class Transfer extends JFrame {
 		acctNumField = new JTextField();
 		acctNumField.setEnabled(false);
 		acctNumField.setBounds(170, 60, 90, 29);
-		acctNumField.setText(" " + currentUser.getAccountNumber());
+		//acctNumField.setText(" " + currentUser.getAccountNumber());
 		transferPanel.add(acctNumField);
 		
 		acctBlncField = new JTextField();
 		acctBlncField.setEnabled(false);
 		acctBlncField.setBounds(170, 100, 90, 29);
-		acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
+		//acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
 		transferPanel.add(acctBlncField);
 		
 		stmtField = new JTextArea();
@@ -161,28 +161,27 @@ public class Transfer extends JFrame {
 	}
 	
 	public class ButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-			int acctPin = Integer.parseInt(authPinField.getText());
-			int accountNum = Integer.parseInt(acctTrnField.getText());
-						
+		public void actionPerformed(ActionEvent event) {			
 			if(event.getSource() == returnButton) {
 				new Main(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == transferBtn) {
 				try {
+					int acctPin = Integer.parseInt(authPinField.getText());
+					int accountNum = Integer.parseInt(acctTrnField.getText());
 					int acctId1 = (Integer) comboBox1.getSelectedItem();
 					int acctId2 = (Integer) comboBox2.getSelectedItem();
 					int value = Integer.parseInt(amtTrnField.getText());
 					Account accountFrom = currentUser.getAccount(acctId1);
 					Account accountTo = currentUser.getAccount(acctId2);
-					if(value < 0) {
+					if(value <= 0) {
 						stmtField.setText("Unable to transfer $0.00 into an account"); 
-						break; //break of this try, throw new illegal argument exception
+						//need to break out of this try statement
 					}
-					if(accountFrom.canWithdrawAmount(value) != true) {
+					else if(accountFrom.canWithdrawAmount(value) != true) {
 						stmtField.setText("Amount to transfer exceeds the current Balance of" + accountFrom); 
-						break; //need to break out of this try, throw new illegal argument exception
+						//need to break out of this try, throw new illegal argument exception
 					}
 					else {
 						int oldVal = accountFrom.withdrawFromAccount(value);
@@ -192,7 +191,7 @@ public class Transfer extends JFrame {
 						stmtField.setText("Successfully transferred $" + value + "From Account:" + accountFrom + " to Account: " + accountTo); 
 					}
 				}catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Amount to withdraw exceeds current Balance");
+					JOptionPane.showMessageDialog(null, "There was an error in completing your request, please try again");
 				}
 					//currentUser.withdrawlMoney(transferVal);
 					//transferUser.depositMoney(transferVal);
