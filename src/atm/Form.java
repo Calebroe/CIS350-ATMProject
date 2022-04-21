@@ -2,36 +2,35 @@ package atm;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.sql.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import atm.Main.ButtonListener;
-
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import java.util.Date;
 
 public class Form extends JFrame {
 
 	private JPanel contentPane, panel1;
 	private JTextField firstNameField, lastNameField, pinField1, pinField2, stmtField, dobField;
 	private JLabel formlbl1, formBanner1, firstNamelbl, lastNamelbl, 
-	lblLastName_1, formlbl2, formlbl3, formlbl4, pinlbl1, pinlbl2, dobLbl;
-	private JRadioButton rdbtnCheck, rdbtnSave;
+	lblLastName_1, formlbl3, formlbl4, pinlbl1, pinlbl2, dobLbl;
 	private JButton createbtn, returnButton;
 	
 	Database database = new Database();
-	private int flag1 = 0;
-	private int flag2 = 0;
 	/**
 	 * Create the frame.
 	 */
@@ -61,11 +60,6 @@ public class Form extends JFrame {
 		formlbl1.setBounds(33, 56, 204, 24);
 		panel1.add(formlbl1);
 		
-		formlbl2 = new JLabel("Please select accounts desired:");
-		formlbl2.setFont(new Font("Tahoma", Font.BOLD, 11));
-		formlbl2.setBounds(216, 202, 177, 24);
-		panel1.add(formlbl2);
-		
 		formlbl3 = new JLabel("Please enter account pin:");
 		formlbl3.setBounds(31, 176, 154, 24);
 		panel1.add(formlbl3);
@@ -84,16 +78,6 @@ public class Form extends JFrame {
 		lastNamelbl.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lastNamelbl.setBounds(67, 110, 68, 24);
 		panel1.add(lastNamelbl);
-		
-		rdbtnCheck = new JRadioButton("Checking Account");
-		rdbtnCheck.setBounds(246, 225, 124, 23);
-		rdbtnCheck.addActionListener(new ButtonListener());
-		panel1.add(rdbtnCheck);
-		
-		rdbtnSave = new JRadioButton("Savings Account");
-		rdbtnSave.setBounds(246, 251, 109, 23);
-		rdbtnSave.addActionListener(new ButtonListener());
-		panel1.add(rdbtnSave);
 		
 		pinlbl1 = new JLabel("Pin:");
 		pinlbl1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -161,17 +145,39 @@ public class Form extends JFrame {
 				dispose();
 			}
 			else if(event.getSource() == createbtn) {
-				//add logic to populate database with new user from fields,
-				//stmtField.setText("The deposit in the amount of: $"+depositVal+ 
-				//		" was successfully deposited in account:" + currentUser.getAccountNumber());
-				//depositVal = 0;
-				//depositField.setText("$ " + depositVal + ".00");
-			}
-			else if(event.getSource() == rdbtnCheck) {
-				flag1 = 1;
-			}
-			else if(event.getSource() == rdbtnSave) {
-				flag2 = 1;
+				int validPin = 0;
+				String extractedDate = dobField.getText();
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				java.util.Date textFieldAsDate = null;
+				try {
+				    textFieldAsDate = sdf.parse(extractedDate);
+				} catch (Exception e) {
+				    //message box should appear that says wrong date format
+					break; //do i need to break out of this?
+				}
+				try {
+					int tempPin = Integer.parseInt(pinField1.getText());
+					int tempPin2 = Integer.parseInt(pinField2.getText());
+					if(tempPin == tempPin2) {
+						validPin = tempPin;
+					}
+				} catch (Exception e) {
+					//message box should appear that says wrong date format
+					break; //do i need to break out of this?
+				}
+				sdf = new SimpleDateFormat("yyyy-MM-dd");
+				java.sql.Date date = java.sql.Date.valueOf(sdf.format(textFieldAsDate));
+				try {
+				int userId = database.getRandomNumberString();
+				int acctId1 = database.getRandomAcctString();
+				int acctId2 = database.getRandomAcctString();
+				
+				String tempLast = lastNameField.getText();
+				String tempFirst = firstNameField.getText();
+				if(tempPin == tempPin2) {
+					database.createUserAccount(tempFirst, tempLast, userId, tempPin, date);
+				}
+				}
 			}
 		}
 	}
