@@ -18,6 +18,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JList;
+import java.awt.Choice;
+import javax.swing.JComboBox;
 
 public class Deposit extends JFrame {
 
@@ -30,7 +33,7 @@ public class Deposit extends JFrame {
 	private JTextField depositField;
 	private JTextField currBalanceField;
 	private JTextField prevBalanceField;
-	private JLabel userInfo, amtBnner, todepositBnr, currentBnnr, previousBnnr;
+	private JLabel userInfo, amtBnner, todepositBnr, currentBnnr, previousBnnr, depositLbl;
 	private static User[] users;
 	private static User currentUser;
 	private BankingSys system;
@@ -38,8 +41,10 @@ public class Deposit extends JFrame {
 	private int depositVal;
 	
 	Database database = new Database();
+	JComboBox comboBox1 = new JComboBox();
 	
 	public Deposit(User currentUser) {
+		
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 715, 588);
@@ -55,6 +60,11 @@ public class Deposit extends JFrame {
 		depositPanel.setBackground(Color.WHITE);
 		contentPane.add(depositPanel);
 		depositPanel.setLayout(null);
+		
+		depositLbl = new JLabel("$");
+		depositLbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		depositLbl.setBounds(165, 218, 13, 37);
+		depositPanel.add(depositLbl);
 		
 		oneDollarBtn = new JButton("$1");
 		oneDollarBtn.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -117,7 +127,7 @@ public class Deposit extends JFrame {
 		depositField = new JTextField();
 		depositField.setEditable(false);
 		depositField.setBounds(176, 221, 116, 31);
-		depositField.setText("$ " +"0.00");
+		depositField.setText("0.00");
 		depositPanel.add(depositField);
 		
 		clearBtn = new JButton("Clear");
@@ -152,13 +162,19 @@ public class Deposit extends JFrame {
 		prevBalanceField.setEditable(false);
 		prevBalanceField.setColumns(10);
 		prevBalanceField.setBounds(438, 125, 161, 27);
-		prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
+		//prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
 		depositPanel.add(prevBalanceField);
 		
 		userInfo = new JLabel("New label");
 		userInfo.setBounds(426, 11, 206, 14);
 		userInfo.setText("Welcome back " + currentUser.getFirstName() + " " + currentUser.getLastName());
 		depositPanel.add(userInfo);
+		
+		for (Account a : currentUser.getAllAccounts()) {
+			comboBox.addItem(a.getacctId());
+		}
+		comboBox.setBounds(327, 315, 247, 23);
+		depositPanel.add(comboBox);
 		
 		stmtField = new JTextField();
 		stmtField.setEditable(false);
@@ -171,12 +187,24 @@ public class Deposit extends JFrame {
 	}
 	
 	public class ButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+		public void actionPerformed(ActionEvent event) {	
 			if(event.getSource() == returnButton) {
 				new Main(currentUser).setVisible(true);
 				dispose();
 			}
 			else if(event.getSource() == confirmBtn) {
+				int acctId = (Integer) comboBox.getSelectedItem();
+				int value = Integer.parseInt(depositField.getText());
+				Account account = currentUser.getAccount(acctId);
+				if(value > 0) {
+					int oldVal = account.depositIntoAccount(value);
+					prevBalanceField.setText(Integer.toString(oldVal));
+					currBalanceField.setText(Integer.toString(account.gettotalBalance()));
+				}
+				else {
+					stmtField.setText("Unable to deposit amount into account"); 
+				}
+							
 				//currBalanceField.setText("$  "+currentUser.getTotalBalance() + ".00");
 				//currentUser.depositMoney(depositVal);
 				//prevBalanceField.setText("$  "+currentUser.getTotalBalance()+".00");
@@ -187,31 +215,31 @@ public class Deposit extends JFrame {
 			}
 			else if(event.getSource() == clearBtn) {
 				depositVal = 0;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == oneDollarBtn) {
 				depositVal++;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == fiveDollarBtn) {
 				depositVal = depositVal + 5;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == tenDollarBtn) {
 				depositVal = depositVal + 10;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == twentyDollarBtn) {
 				depositVal = depositVal + 20;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == fiftyDollarBtn) {
 				depositVal = depositVal + 50;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 			else if(event.getSource() == hundredDollarBtn) {
 				depositVal = depositVal + 100;
-				depositField.setText("$ " + depositVal + ".00");
+				depositField.setText(Integer.toString(depositVal));
 			}
 		}
 	}
