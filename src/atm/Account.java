@@ -1,11 +1,77 @@
 package atm;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Account {
 	private int acctId;
 	private int totalBalance;
 	private String acctType;
-	//setup random number generator for account type, string of eight numbers, need to see if the database already has that number
 
+	public int depositIntoAccount(int value) {
+		ResultSet rs = null;
+		Connection connection = null;
+		Statement statement = null;
+		int oldVal = totalBalance;
+		int newBalance = totalBalance + value;
+		String query = "UPDATE account SET balance ="+newBalance+" WHERE account_id=" +acctId;
+		try {
+			connection = JDBCMySQLConnection.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			totalBalance = newBalance;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return oldVal;
+	}
+	
+	public int withdrawFromAccount(int value) {
+		ResultSet rs = null;
+		Connection connection = null;
+		Statement statement = null;
+		int oldVal = totalBalance;
+		int newBalance = totalBalance - value;
+		//need this to return an error if value being pulled is greater than amount.
+		String query = "UPDATE account SET balance ="+newBalance+" WHERE account_id=" +acctId;
+		try {
+			connection = JDBCMySQLConnection.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			totalBalance = newBalance;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return oldVal;
+	}
+	
+	public boolean canWithdrawAmount(int value) {
+		if( value <= totalBalance ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public Account(int acctId, int totalBalance, String acctType) {
 	        this.acctId = acctId;
 	        this.totalBalance = totalBalance;
