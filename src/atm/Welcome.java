@@ -1,21 +1,12 @@
 package atm;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.sql.SQLException;
-import java.util.Date;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+//import java.sql.SQLException;
+//import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import atm.Main.ButtonListener;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -25,10 +16,21 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
+/*************************************************
+ * Front end JPanel for displaying Login Screen
+ *
+ * @author Caleb Roe
+ * @version April 21, 2022
+ *************************************************/
 public class Welcome extends JFrame {
 
+	/*************************************************
+	 * Front end JPanel for displaying Deposit Screen
+	 *
+	 * @author Caleb Roe
+	 * @version April 21, 2022
+	 *************************************************/
 	private static final long serialVersionUID = 1L;
-
 	private JPanel contentPane, panel;
 	private JLabel titleBanner, titleBanner2, titleBanner3, userBanner, acctBanner, acctLbl, pinLbl;
 	private JButton loginBtn, CreateAcctBtn;
@@ -36,13 +38,8 @@ public class Welcome extends JFrame {
 	private JPasswordField pinField;
 	private static User currentUser;
 
-	// private static User[] users;
-
-	// User currentUser = new User("testfirstn","testlastn", 1111, 1000001,
-	// 06061999);
-
 	/**
-	 * Create the frame.
+	 * Initialize the frame.
 	 */
 	public Welcome() {
 		setBackground(Color.LIGHT_GRAY);
@@ -126,6 +123,11 @@ public class Welcome extends JFrame {
 		currentUser = new User();
 	}
 
+	/**************************************************************
+	 * Respond to either button clicks
+	 * 
+	 * @param e the action event that was just fired
+	 **************************************************************/
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == loginBtn) {
@@ -147,6 +149,9 @@ public class Welcome extends JFrame {
 		}
 	}
 
+	/**
+	 * main method to call class initialize
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
