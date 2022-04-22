@@ -1,14 +1,19 @@
 package atm;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.ArrayList;
-import atm.JDBCMySQLConnection;
 
+/*************************************************
+ * User Class
+ *
+ * @author Caleb Roe
+ * @version April 21, 2022
+ *************************************************/
 public class User {
 	private int userPin;
 	private String firstName;
@@ -21,35 +26,37 @@ public class User {
 	// setup random number for userId, string of eight numbers, it needs a check to
 	// see if the database already has that number
 
+	/**
+	 * Default Constructor for testing
+	 */
 	public User() {
 		userPin = 0;
-		firstName = null;
-		lastName = null;
+		firstName = "test";
+		lastName = "test";
 		dob = null;
-		userId = 0;
+		userId = 1200;
 		accounts = new ArrayList<Account>();
 	}
 
-	public User getUserAccount(int userPin, int userId) {
+	/*********************************************************
+	 * Method that returns a User object from SQL database
+	 * 
+	 * @param userpin the user_pin associated with the user_id
+	 * @param userid  the user_id associated with a specific user
+	 * @return user
+	 *********************************************************/
+	public User getUserAccount(int userpin, int userid) {
 		ResultSet rs = null;
 		Connection connection = null;
 		Statement statement = null;
 
 		User user = null;
-		String query = "SELECT * FROM user WHERE user_id=" + userId;
-		String query1 = "SELECT * FROM account WHERE user_id=" + userId;
+		String query = "SELECT * FROM user WHERE user_id=" + userid + " AND user_pin=" + userpin;
+		String query1 = "SELECT * FROM account WHERE user_id=" + userid;
 		try {
 			connection = JDBCMySQLConnection.getConnection();
 			statement = connection.createStatement();
 			rs = statement.executeQuery(query);
-//			if (rs == null) {
-//				// throw new illegal arguement no account found
-//				System.out.print("invalid , is null");
-//			}
-//			if (userPin != rs.getInt("user_pin")) {
-//				// throw new illegal arguement does not match
-//				System.out.print("invalid Pin");
-//			}
 			if (rs.next()) {
 				userPin = rs.getInt("user_pin");
 				userId = rs.getInt("user_id");
@@ -58,9 +65,7 @@ public class User {
 				lastName = rs.getString("user_lastName");
 			}
 			rs = statement.executeQuery(query1);
-//			if (rs == null) {
-//				// throw new illegal arguement no accounts found
-//			}
+
 			while (rs.next()) {
 				Account a1 = new Account(rs.getInt("account_id"), rs.getInt("balance"), rs.getString("account_type"));
 				accounts.add(a1);
@@ -79,10 +84,50 @@ public class User {
 		return user;
 	}
 
+	/*********************************************************
+	 * Method that updates the user_pin of the User object in SQL database
+	 * 
+	 * @param newPin the new user_pin associated with the user_id
+	 *********************************************************/
+	public void updatePin(int newPin) {
+
+		Connection connection = null;
+		Statement statement = null;
+
+		String query = "UPDATE user SET user_pin =" + newPin + " WHERE user_id=" + userId;
+		try {
+			connection = JDBCMySQLConnection.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/*********************************************************
+	 * Method that returns an ArrayList of Accounts from the SQL database that are
+	 * associated with the User object
+	 * 
+	 * @return accounts
+	 *********************************************************/
 	public ArrayList<Account> getAllAccounts() {
 		return accounts;
 	}
 
+	/*********************************************************
+	 * Method that returns an account from the SQL database that is associated with
+	 * the User object
+	 * 
+	 * @return account
+	 *********************************************************/
 	public Account getAccount(int account_Id) {
 		for (Account a : accounts) {
 			if (a.getacctId() == account_Id) {
@@ -92,11 +137,11 @@ public class User {
 		return null; // could throw an exception
 	}
 
+	/*********************************************************
+	 * Getter and setters for the User
+	 * 
+	 *********************************************************/
 	public void setUserPin(int userPin) {
-		int length = String.valueOf(userPin).length();
-		if (length != 4) {
-			throw new IllegalArgumentException();
-		}
 		this.userPin = userPin;
 	}
 
@@ -105,17 +150,6 @@ public class User {
 	}
 
 	public void setFirstName(String firstName) {
-		int d = Integer.parseInt(firstName);
-		int length = String.valueOf(d).length();
-		if (firstName == null || firstName.length() == 0) {
-			throw new IllegalArgumentException();
-		}
-		if (length >= 0) {
-			throw new IllegalArgumentException();
-		}
-		if (firstName == null) {
-			throw new IllegalArgumentException();
-		}
 		this.firstName = firstName;
 	}
 
@@ -124,14 +158,6 @@ public class User {
 	}
 
 	public void setLastName(String lastName) {
-		int d = Integer.parseInt(lastName);
-		int length = String.valueOf(d).length();
-		if (lastName == null || lastName.length() == 0) {
-			throw new IllegalArgumentException();
-		}
-		if (length >= 0) {
-			throw new IllegalArgumentException();
-		}
 		this.lastName = lastName;
 	}
 
@@ -154,14 +180,6 @@ public class User {
 	public int getUserId() {
 		return userId;
 	}
-
-//    public void setAccountNumber(int accountNumber) {
-//        int length = String.valueOf(accountNumber).length();
-//        if (length != 10) {
-//            throw new IllegalArgumentException();
-//        }
-//        this.accountNumber = accountNumber;
-//    }
 
 	// toString()
 	@Override
