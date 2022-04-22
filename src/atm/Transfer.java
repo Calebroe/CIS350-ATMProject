@@ -1,51 +1,51 @@
 package atm;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import atm.Withdrawal.ButtonListener;
-
 import java.awt.Color;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 
+/*************************************************
+ * Front end JPanel for displaying Transfer Screen
+ *
+ * @author Caleb Roe
+ * @version April 21, 2022
+ *************************************************/
 public class Transfer extends JFrame {
 
 	private JPanel contentPane, transferPanel;
-	private JTextField acctTrnField, amtTrnField, authPinField, acctNumField, acctBlncField;
+	private JTextField amtTrnField;
 	private JButton returnButton, transferBtn, clearBtn;
 	JTextArea stmtField;
 	//private static User[] users;
 	private static User currentUser, transferUser;
-	private JLabel acctNum, acctBlnc, authPin, transferlbl, acctTransfer, amtTransfer, dollarSign;
-	private int transferVal = 0;
+	private JLabel transferlbl, acctTransferTo, amtTransfer, dollarSign, acctTransferFrom;
 	
 	Database database = new Database();
 	JComboBox comboBox1 = new JComboBox();
 	JComboBox comboBox2 = new JComboBox();
+	private JLabel savingsAcct;
+	private JLabel checkingAcct;
 		
 	/**
-	 * Initialize JFrame.
+	 * Initialize the frame.
 	 */
 	public Transfer(User currentUser) {
 		setTitle("ATLAS ATM");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 532, 692);
+		setBounds(100, 100, 532, 589);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -55,7 +55,7 @@ public class Transfer extends JFrame {
 		
 		transferPanel = new JPanel();
 		transferPanel.setBackground(Color.WHITE);
-		transferPanel.setBounds(10, 11, 496, 631);
+		transferPanel.setBounds(10, 11, 496, 528);
 		contentPane.add(transferPanel);
 		transferPanel.setLayout(null);
 		
@@ -65,32 +65,29 @@ public class Transfer extends JFrame {
 		transferlbl.setBounds(157, 11, 177, 40);
 		transferPanel.add(transferlbl);
 		
-		acctTrnField = new JTextField();
-		acctTrnField.setBounds(256, 192, 90, 29);
-		transferPanel.add(acctTrnField);
-		
-		acctTransfer = new JLabel("Accout number to transfer to:");
-		acctTransfer.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctTransfer.setBounds(25, 190, 221, 29);
-		transferPanel.add(acctTransfer);
+		acctTransferTo = new JLabel("Accout number to transfer to:");
+		acctTransferTo.setFont(new Font("Tahoma", Font.BOLD, 15));
+		acctTransferTo.setBounds(25, 239, 221, 29);
+		transferPanel.add(acctTransferTo);
 		
 		amtTransfer = new JLabel("Amount to transfer:");
 		amtTransfer.setFont(new Font("Tahoma", Font.BOLD, 15));
-		amtTransfer.setBounds(25, 242, 177, 29);
+		amtTransfer.setBounds(25, 322, 177, 29);
 		transferPanel.add(amtTransfer);
 		
-		amtTrnField = new JTextField();
-		amtTrnField.setBounds(256, 244, 106, 29);
+		amtTrnField = new JTextField("0.00");
+		amtTrnField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		amtTrnField.setBounds(192, 324, 106, 29);
 		transferPanel.add(amtTrnField);
 		
 		dollarSign = new JLabel("$");
 		dollarSign.setFont(new Font("Tahoma", Font.BOLD, 15));
-		dollarSign.setBounds(245, 242, 10, 29);
+		dollarSign.setBounds(180, 322, 10, 29);
 		transferPanel.add(dollarSign);
 		
 		clearBtn = new JButton("Clear");
 		clearBtn.setFont(new Font("Tahoma", Font.BOLD, 15));
-		clearBtn.setBounds(380, 193, 106, 23);
+		clearBtn.setBounds(192, 364, 106, 23);
 		clearBtn.addActionListener(new ButtonListener());
 		transferPanel.add(clearBtn);
 		
@@ -106,60 +103,53 @@ public class Transfer extends JFrame {
 		returnButton.addActionListener(new ButtonListener());
 		transferPanel.add(returnButton);
 		
-		acctNum = new JLabel("Accout number:");
-		acctNum.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctNum.setBounds(25, 60, 128, 29);
-		transferPanel.add(acctNum);
-		
-		acctBlnc = new JLabel("Accout Balance:");
-		acctBlnc.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctBlnc.setBounds(25, 100, 128, 29);
-		
-		transferPanel.add(acctBlnc);
-		
-		authPin = new JLabel("Authenticate Pin:");
-		authPin.setFont(new Font("Tahoma", Font.BOLD, 15));
-		authPin.setBounds(25, 140, 144, 29);
-		transferPanel.add(authPin);
-		
-		authPinField = new JTextField();
-		authPinField.setColumns(10);
-		authPinField.setBounds(170, 140, 90, 29);
-		transferPanel.add(authPinField);
-		
-		acctNumField = new JTextField();
-		acctNumField.setEnabled(false);
-		acctNumField.setBounds(170, 60, 90, 29);
-		//acctNumField.setText(" " + currentUser.getAccountNumber());
-		transferPanel.add(acctNumField);
-		
-		acctBlncField = new JTextField();
-		acctBlncField.setEnabled(false);
-		acctBlncField.setBounds(170, 100, 90, 29);
-		//acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
-		transferPanel.add(acctBlncField);
-		
 		stmtField = new JTextArea();
 		stmtField.setBackground(Color.LIGHT_GRAY);
-		stmtField.setBounds(10, 415, 476, 205);
+		stmtField.setBounds(10, 415, 476, 99);
 		transferPanel.add(stmtField);
 		
 		for (Account a : currentUser.getAllAccounts()) {
 			comboBox1.addItem(a.getacctId());
 		}
-		comboBox1.setBounds(327, 315, 247, 23); //create new position using windowbuilder
+		comboBox1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboBox1.setBounds(69, 205, 221, 23); //create new position using windowbuilder
 		transferPanel.add(comboBox1);
 		
 		for (Account a : currentUser.getAllAccounts()) {
 			comboBox2.addItem(a.getacctId());
 		}
-		comboBox2.setBounds(327, 315, 247, 23); //create new position using windowbuilder
+		comboBox2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboBox2.setBounds(69, 279, 221, 23); //create new position using windowbuilder
 		transferPanel.add(comboBox2);
-		Transfer.currentUser = currentUser;
 		
-		//create two labels for drop downs, one for select acount to transfer from and transfer to.
+		acctTransferFrom = new JLabel("Accout number to transfer from:");
+		acctTransferFrom.setFont(new Font("Tahoma", Font.BOLD, 15));
+		acctTransferFrom.setBounds(25, 165, 286, 29);
+		transferPanel.add(acctTransferFrom);
+		
+		ArrayList<Account> a = currentUser.getAllAccounts();
+		Account account1 = a.get(0);
+		Account account2 = a.get(1);
+		
+		savingsAcct = new JLabel(account1.getacctId() + "-" + account1.getAcctType() + "($" + account1.gettotalBalance() + ")");
+		savingsAcct.setFont(new Font("Tahoma", Font.BOLD, 15));
+		savingsAcct.setBounds(25, 59, 371, 29);
+		transferPanel.add(savingsAcct);
+		
+		checkingAcct = new JLabel(account2.getacctId() + "-" + account2.getAcctType() + "($" + account2.gettotalBalance() + ")");
+		checkingAcct.setFont(new Font("Tahoma", Font.BOLD, 15));
+		checkingAcct.setBounds(25, 99, 371, 29);
+		transferPanel.add(checkingAcct);
+		
+		
+		
+		Transfer.currentUser = currentUser;
 	}
 	
+	 /**************************************************************
+    Respond to either button clicks
+    @param e the action event that was just fired
+    **************************************************************/
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {			
 			if(event.getSource() == returnButton) {
@@ -168,8 +158,6 @@ public class Transfer extends JFrame {
 			}
 			else if(event.getSource() == transferBtn) {
 				try {
-					int acctPin = Integer.parseInt(authPinField.getText());
-					int accountNum = Integer.parseInt(acctTrnField.getText());
 					int acctId1 = (Integer) comboBox1.getSelectedItem();
 					int acctId2 = (Integer) comboBox2.getSelectedItem();
 					int value = Integer.parseInt(amtTrnField.getText());
@@ -177,36 +165,25 @@ public class Transfer extends JFrame {
 					Account accountTo = currentUser.getAccount(acctId2);
 					if(value <= 0) {
 						stmtField.setText("Unable to transfer $0.00 into an account"); 
-						//need to break out of this try statement
 					}
 					else if(accountFrom.canWithdrawAmount(value) != true) {
-						stmtField.setText("Amount to transfer exceeds the current Balance of" + accountFrom); 
-						//need to break out of this try, throw new illegal argument exception
+						stmtField.setText("Amount to transfer exceeds the current Balance of " + accountFrom); 
 					}
 					else {
 						int oldVal = accountFrom.withdrawFromAccount(value);
 						int newVal = accountTo.depositIntoAccount(value);
-						//prevBalanceField.setText(Integer.toString(oldVal));
-						//currBalanceField.setText(Integer.toString(account.gettotalBalance()));
-						stmtField.setText("Successfully transferred $" + value + "From Account:" + accountFrom + " to Account: " + accountTo); 
+						stmtField.setText("Transferred $" + value + ", From: " + accountFrom + " To: " + accountTo);
+						amtTrnField.setText("0.00"); 
+						//savingsAcct.setText(account1.getacctId() + account1.getAcctType() + account1.gettotalBalance());
+						//checkingAcct =.setText(account2.getacctId() + account2.getAcctType() + account2.gettotalBalance());
 					}
 				}catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "There was an error in completing your request, please try again");
 				}
-					//currentUser.withdrawlMoney(transferVal);
-					//transferUser.depositMoney(transferVal);
-					//stmtField.setText("Transfered in the amount of: $"+ transferVal + " from account: " + currentUser.getAccountNumber() + 
-					//		" to account: " + transferUser.getAccountNumber()); 
-					//stmtField.setText("Transfered $" + transferVal + "from account: " + currentUser.getAccountNumber() + 
-							//" to account: " + transferUser.getAccountNumber());
-					//acctBlncField.setText("$ " + currentUser.getTotalBalance() + ".00");
 					amtTrnField.setText("");
-					acctTrnField.setText("");
 				}
 			else if(event.getSource() == clearBtn) {
-				int temp = 0;
-				amtTrnField.setText("$ " + temp + ".00");
-				acctTrnField.setText("");
+				amtTrnField.setText("0.00");
 			}
 		}
 	}
