@@ -1,25 +1,24 @@
 package atm;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import atm.Login.ButtonListener;
 import java.awt.Color;
-import javax.swing.JTextArea;
-import java.awt.FlowLayout;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import javax.swing.Action;
 import java.awt.event.ActionListener;
 
+/*************************************************
+ * Front end JPanel for displaying Menu Screen
+ *
+ * @author Caleb Roe
+ * @version April 21, 2022
+ *************************************************/
 public class Main extends JFrame {
 	private JFrame mainFrame;
 	private JPanel contentPane;
@@ -27,84 +26,89 @@ public class Main extends JFrame {
 	private JLabel welcomeUser, atmBanner1, atmBanner2;
 	private static User currentUser;
 	private JButton AccountBtn;
-	private JButton StatementBtn;
 	
 
 	/**
-	 * Create the frame.
+	 * Initialize the frame.
 	 */
 	//public Main(User users[], User currentUser) {
 	public Main(User currentUser) {
 		setBackground(Color.LIGHT_GRAY);
 		setTitle("ATLAS ATM Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 500);
+		setBounds(100, 100, 500, 502);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setResizable(false);
 		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(10, 10, 464, 442);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		welcomeUser = new JLabel("s");
+		welcomeUser.setHorizontalAlignment(SwingConstants.CENTER);
+		welcomeUser.setBounds(97, 47, 287, 19);
+		panel.add(welcomeUser);
+		welcomeUser.setFont(new Font("Tahoma", Font.BOLD, 15));
+		welcomeUser.setText("Welcome back " + currentUser.getFirstName() + " " + currentUser.getLastName());
+		
+		atmBanner2 = new JLabel("Atlas ATM");
+		atmBanner2.setBounds(0, 0, 151, 36);
+		panel.add(atmBanner2);
+		atmBanner2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		atmBanner2.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		atmBanner1 = new JLabel("Main Menu");
+		atmBanner1.setBounds(156, 58, 157, 58);
+		panel.add(atmBanner1);
 		atmBanner1.setFont(new Font("Tahoma", Font.BOLD, 27));
 		atmBanner1.setHorizontalAlignment(SwingConstants.CENTER);
 		atmBanner1.setBackground(Color.LIGHT_GRAY);
-		atmBanner1.setBounds(160, 53, 157, 58);
-		contentPane.add(atmBanner1);
-		
-		atmBanner2 = new JLabel("Atlas ATM");
-		atmBanner2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		atmBanner2.setHorizontalAlignment(SwingConstants.CENTER);
-		atmBanner2.setBounds(10, 10, 151, 36);
-		contentPane.add(atmBanner2);
 		
 		depositButton = new JButton("Deposit");
-		depositButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		depositButton.setBounds(80, 122, 140, 45);
-		depositButton.addActionListener(new ButtonListener());
-		contentPane.add(depositButton);
+		depositButton.setBounds(50, 145, 160, 45);
+		panel.add(depositButton);
+		depositButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		withdrawButton = new JButton("Withdrawal");
-		withdrawButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		withdrawButton.setBounds(266, 122, 140, 45);
-		withdrawButton.addActionListener(new ButtonListener());
-		contentPane.add(withdrawButton);
+		withdrawButton.setBounds(255, 145, 160, 45);
+		panel.add(withdrawButton);
+		withdrawButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		transferButton = new JButton("Transfer");
-		transferButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		transferButton.setBounds(80, 203, 140, 45);
-		transferButton.addActionListener(new ButtonListener());
-		contentPane.add(transferButton);
+		transferButton.setBounds(50, 226, 160, 45);
+		panel.add(transferButton);
+		transferButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		AccountBtn = new JButton("Account");
-		AccountBtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		AccountBtn.setBounds(266, 203, 140, 45);
-		AccountBtn.addActionListener(new ButtonListener());
-		contentPane.add(AccountBtn);
-		
-		StatementBtn = new JButton("Statement");
-		StatementBtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		StatementBtn.setBounds(80, 281, 140, 45);
-		StatementBtn.addActionListener(new ButtonListener());
-		contentPane.add(StatementBtn);
+		AccountBtn.setBounds(255, 226, 160, 45);
+		panel.add(AccountBtn);
+		AccountBtn.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		LogOutBtn = new JButton("Log Out");
-		LogOutBtn.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		LogOutBtn.setBounds(266, 281, 140, 45);
+		LogOutBtn.setBounds(167, 303, 140, 45);
+		panel.add(LogOutBtn);
+		LogOutBtn.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		LogOutBtn.addActionListener(new ButtonListener());
-		contentPane.add(LogOutBtn);
-		
-		welcomeUser = new JLabel("s");
-		welcomeUser.setFont(new Font("Tahoma", Font.BOLD, 15));
-		welcomeUser.setBounds(229, 17, 230, 25);
-		welcomeUser.setText("Welcome back " + currentUser.getFirstName() + " " + currentUser.getLastName());
-		contentPane.add(welcomeUser);
+		AccountBtn.addActionListener(new ButtonListener());
+		transferButton.addActionListener(new ButtonListener());
+		withdrawButton.addActionListener(new ButtonListener());
+		depositButton.addActionListener(new ButtonListener());
 		
 		//assigning parameters
 		//Main.users = users; //= Main.users;
 		Main.currentUser = currentUser;
 	}
 	
+	 /**************************************************************
+    Respond to either button clicks
+    @param e the action event that was just fired
+    **************************************************************/
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == LogOutBtn) {
