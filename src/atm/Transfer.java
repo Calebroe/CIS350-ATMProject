@@ -67,7 +67,7 @@ public class Transfer extends JFrame {
 		
 		acctTransferTo = new JLabel("Accout number to transfer to:");
 		acctTransferTo.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctTransferTo.setBounds(25, 239, 221, 29);
+		acctTransferTo.setBounds(25, 239, 230, 29);
 		transferPanel.add(acctTransferTo);
 		
 		amtTransfer = new JLabel("Amount to transfer:");

@@ -204,7 +204,7 @@ public class Deposit extends JFrame {
 					int oldVal = account.depositIntoAccount(value);
 					prevBalanceField.setText(Integer.toString(oldVal));
 					currBalanceField.setText(Integer.toString(account.gettotalBalance()));
-					
+					stmtField.setText("Successfully Deposited $" + value + ", into Account: " + account.getacctId()); 
 				}
 				else {
 					stmtField.setText("Unable to deposit amount into account"); 

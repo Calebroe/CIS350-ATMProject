@@ -182,9 +182,9 @@ public class User {
 	}
 
 	// toString()
-	@Override
-	public String toString() {
-		return "User [userId = " + userId + ", userPin = " + userPin + ", dob = " + dob + ", First Name = " + firstName
-				+ "Last Name = " + lastName + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "User [userId = " + userId + ", userPin = " + userPin + ", dob = " + dob + ", First Name = " + firstName
+//				+ "Last Name = " + lastName + "]";
+//	}
 }

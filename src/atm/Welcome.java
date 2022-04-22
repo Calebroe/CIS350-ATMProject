@@ -85,12 +85,12 @@ public class Welcome extends JFrame {
 
 		userBanner = new JLabel("Existing User?");
 		userBanner.setFont(new Font("Tahoma", Font.BOLD, 15));
-		userBanner.setBounds(123, 181, 108, 19);
+		userBanner.setBounds(123, 181, 128, 19);
 		panel.add(userBanner);
 
 		acctBanner = new JLabel("Become an Account Holder");
 		acctBanner.setFont(new Font("Tahoma", Font.BOLD, 15));
-		acctBanner.setBounds(81, 335, 205, 14);
+		acctBanner.setBounds(81, 335, 220, 14);
 		panel.add(acctBanner);
 
 		CreateAcctBtn = new JButton("Create Account");

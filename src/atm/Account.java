@@ -140,9 +140,9 @@ public class Account {
 	}
 
 	// toString()
-	@Override
-	public String toString() {
-		return "Account [acctId = " + acctId + ", Account Type = " + acctType + ", Total balance = " + totalBalance
-				+ "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Account [acctId = " + acctId + ", Account Type = " + acctType + ", Total balance = " + totalBalance
+//				+ "]";
+//	}
 }

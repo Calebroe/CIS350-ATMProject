@@ -208,12 +208,12 @@ public class Withdrawal extends JFrame {
 					
 					if(account.canWithdrawAmount(value) != true) {
 						stmtField.setText("Unable to deposit amount into account. deposit amount exceeds current account balance"); 
-					}
+					} 
 					else if(value > 0) {
 						int oldVal = account.withdrawFromAccount(value);
 						prevBalanceField.setText(Integer.toString(oldVal));
 						currBalanceField.setText(Integer.toString(account.gettotalBalance()));
-						stmtField.setText("Successfully withdrew $" + value + "From Account:" + account); 
+						stmtField.setText("Successfully withdrew $" + value + ", From Account: " + account.getacctId()); 
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Unable to deposit $0.00 into an account");

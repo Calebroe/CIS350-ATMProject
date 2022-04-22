@@ -57,7 +57,7 @@ public class Form extends JFrame {
 		panel1.add(formBanner1);
 
 		formlbl1 = new JLabel("Please Enter the following Information:");
-		formlbl1.setBounds(33, 56, 204, 24);
+		formlbl1.setBounds(33, 56, 225, 24);
 		panel1.add(formlbl1);
 
 		formlbl3 = new JLabel("Please enter account pin:");

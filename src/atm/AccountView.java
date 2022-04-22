@@ -68,7 +68,7 @@ public class AccountView extends JFrame {
 		panel.add(lastNameLbl);
 
 		accountIdLbl = new JLabel("Account ID:");
-		accountIdLbl.setBounds(25, 164, 95, 20);
+		accountIdLbl.setBounds(25, 164, 110, 20);
 		accountIdLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(accountIdLbl);
 
@@ -78,7 +78,7 @@ public class AccountView extends JFrame {
 		panel.add(acctChkLbl);
 
 		acctSvgLbl = new JLabel("Savings Account #:");
-		acctSvgLbl.setBounds(25, 249, 156, 20);
+		acctSvgLbl.setBounds(25, 249, 165, 20);
 		acctSvgLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(acctSvgLbl);
 
@@ -100,7 +100,7 @@ public class AccountView extends JFrame {
 
 		btnUpdateAccount = new JButton("Update Account");
 		btnUpdateAccount.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnUpdateAccount.setBounds(250, 357, 154, 27);
+		btnUpdateAccount.setBounds(250, 357, 160, 27);
 		btnUpdateAccount.addActionListener(new ButtonListener());
 		panel.add(btnUpdateAccount);
 		
